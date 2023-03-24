@@ -1,0 +1,10 @@
+services:
+  backend:
+    build: 
+      context: ../
+      dockerfile: docker/Dockerfile
+    volumes:
+      - ./../src:/app/src
+      - ./../run:/app/run
+    ports:
+      - 8000:8000
