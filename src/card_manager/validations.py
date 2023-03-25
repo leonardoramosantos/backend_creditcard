@@ -5,6 +5,7 @@ from creditcard import CreditCard
 
 from .exceptions import HolderSizeException
 from .exceptions import InvalidCardNumberException
+from .exceptions import InvalidCVVException
 from .exceptions import InvalidDateException
 from .exceptions import InvalidMonthException
 from .exceptions import InvalidYearException
@@ -54,5 +55,21 @@ def validate_card_number(card_number):
     cc = CreditCard(card_number)
     if not cc.is_valid():
         raise InvalidCardNumberException("Invalid Card Number")
+
+    return True
+
+def validate_cvv(cvv):
+    """
+    Validations for Card Verification field
+
+    """
+
+    cvv_pattern = re.compile(r"[0-9]{3,4}")
+
+    if not isinstance(cvv, int):
+        raise InvalidCVVException("CVV must be integer")
+    
+    if not re.fullmatch(cvv_pattern, str(cvv)):
+        raise InvalidCVVException("CCV must have between 3 and 4 digits")
 
     return True

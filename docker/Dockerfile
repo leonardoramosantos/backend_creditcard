@@ -4,6 +4,7 @@ WORKDIR /app
 
 COPY requirements.txt .
 
+RUN pip install git+https://github.com/maistodos/python-creditcard.git@main
 RUN pip install -r requirements.txt
 
 COPY src src
