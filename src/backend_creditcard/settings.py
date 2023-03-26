@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "card_manager",
+    "rest_framework",
+    "api_v1",
 ]
 
 MIDDLEWARE = [

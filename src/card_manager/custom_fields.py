@@ -13,11 +13,13 @@ class CustomEncryptedField(models.CharField):
     def from_db_value(self, value, expression, connection):
 
         fernet = Fernet(settings.ENCRYPTION_KEY)
-        result = fernet.decrypt(value.encode())
+        result = fernet.decrypt(value.encode()).decode("utf-8")
 
         return result
 
     def get_prep_value(self, value):
+
+        value = str(value).replace(" ", "")
 
         fernet = Fernet(settings.ENCRYPTION_KEY)
         value = fernet.encrypt(value.encode()).decode()
@@ -25,7 +27,7 @@ class CustomEncryptedField(models.CharField):
         return super().get_prep_value(value)
 
 
-class CustomDateGeneratedField(models.DateField):
+class CustomDateGeneratedField(models.CharField):
     """
     Field to process string input and find the last day of month to save on DB
 

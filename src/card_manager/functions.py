@@ -10,4 +10,4 @@ def get_last_day_of_month_date(year, month):
 
     last_day = calendar.monthrange(year, month)[1]
 
-    return date(year, month, last_day)
+    return date(year, month, last_day).strftime("%Y-%m-%d")

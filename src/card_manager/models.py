@@ -17,8 +17,10 @@ class CreditCard(models.Model):
 
     """
 
+    # Primary Key Field
+    id = models.AutoField(primary_key=True)
     # Expiration Date
-    exp_date = CustomDateGeneratedField(validators=[validate_exp_date])
+    exp_date = CustomDateGeneratedField(max_length=10, validators=[validate_exp_date])
     # Card Holder
     holder = models.CharField(max_length=50, validators=[validate_holder])
     # Card Number
@@ -36,4 +38,4 @@ class CreditCard(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self) -> str:
-        return f"CreditCard (card_number={self.card_number}, holder={self.holder}, exp_date={self.exp_date}, brand={self.brand}, cvv={self.cvv})"
+        return f"CreditCard (id={self.id}, card_number={self.card_number}, holder={self.holder}, exp_date={self.exp_date}, brand={self.brand}, cvv={self.cvv})"
