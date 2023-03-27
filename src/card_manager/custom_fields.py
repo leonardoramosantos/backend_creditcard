@@ -1,30 +1,46 @@
-from cryptography.fernet import Fernet
+from cryptography.hazmat.primitives.ciphers import algorithms
+from cryptography.hazmat.primitives.ciphers import Cipher
+from cryptography.hazmat.primitives.ciphers import modes
 from django.db import models
 from django.conf import settings
+from binascii import unhexlify
 
 from .functions import get_last_day_of_month_date
 
 class CustomEncryptedField(models.CharField):
     """
     Wrapped field to save cripted data and show decripted data
-    Inspiration from: https://www.geeksforgeeks.org/how-to-encrypt-and-decrypt-strings-in-python/
+    Inspiration from: https://cryptography.io/en/latest/hazmat/primitives/symmetric-encryption/
 
     """
     def from_db_value(self, value, expression, connection):
+        """
+        Decrypt field value to use on the application.
+    
+        """
 
-        fernet = Fernet(settings.ENCRYPTION_KEY)
-        result = fernet.decrypt(value.encode()).decode("utf-8")
+        cipher = Cipher(algorithms.AES(settings.ENCRYPTION_KEY), 
+                                       modes.CBC(settings.ENCRYPTION_INIT_VECTOR))
+        decryptor = cipher.decryptor()
+        result = decryptor.update(bytes.fromhex(value)) + decryptor.finalize()
 
-        return result
+        return result.decode("utf-8")
 
     def get_prep_value(self, value):
+        """
+        Encrypt value to save on the database.
+        Saves in hexadecimal to make easy the convertion proccess
+
+        """
 
         value = str(value).replace(" ", "")
 
-        fernet = Fernet(settings.ENCRYPTION_KEY)
-        value = fernet.encrypt(value.encode()).decode()
+        cipher = Cipher(algorithms.AES(settings.ENCRYPTION_KEY), 
+                                       modes.CBC(settings.ENCRYPTION_INIT_VECTOR))
+        encryptor = cipher.encryptor()
+        value = encryptor.update(bytes(value, "utf-8")) + encryptor.finalize()
 
-        return super().get_prep_value(value)
+        return super().get_prep_value(value.hex())
 
 
 class CustomDateGeneratedField(models.CharField):

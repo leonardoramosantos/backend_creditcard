@@ -135,7 +135,8 @@ STATICFILES_DIRS = (
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-ENCRYPTION_KEY = b's1ZscfQdMaLBXTAR3e-UFoE6dL6XRivLIsAYNvA0Emk='
+ENCRYPTION_KEY = b'\xd4\xa1\xff^\x81\x01\xa2\xc6:\xd7\xee\xb8Y\xb1\x84cA\xfc\x85\xd0&i\x14\xf1\xc3V\xfe\xd9\x06\x96\xa5\x11'
+ENCRYPTION_INIT_VECTOR = b'\xfaF|wp\x03fo\xbdh\xa3\x11\xc3\x88\xd3\x87'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
